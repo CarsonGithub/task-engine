@@ -12,6 +12,7 @@ import java.util.List;
  * 业务可扩展接口
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  **/
 public interface BusinessProcess<T extends ITask, B extends TaskBehavior> extends TaskEventProcess<T, B> {
 

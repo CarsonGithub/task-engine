@@ -9,6 +9,7 @@ import java.util.Objects;
  * 任务行为
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  **/
 public interface TaskBehavior extends IBehavior {
 

@@ -11,6 +11,7 @@ import java.util.Objects;
  * 默认任务事件
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  **/
 public abstract class DefaultTaskEvent extends ApplicationEvent implements TaskEvent {
 

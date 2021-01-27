@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * 任务驱动
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  **/
 public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IProcess<T> {
 

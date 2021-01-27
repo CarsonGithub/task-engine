@@ -6,6 +6,7 @@ import com.code.task.engine.event.TaskEvent;
  * 事件服务提供者
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  */
 
 public interface EventProvider extends IProvider {

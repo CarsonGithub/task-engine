@@ -6,6 +6,7 @@ import com.code.task.engine.common.TaskContext;
  * 行为接口
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  **/
 public interface IBehavior {
 

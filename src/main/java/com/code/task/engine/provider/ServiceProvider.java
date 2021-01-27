@@ -10,6 +10,7 @@ import java.util.Map;
  * 公共服务提供者
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  */
 public abstract class ServiceProvider implements ApplicationContextAware {
 

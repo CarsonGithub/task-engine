@@ -6,6 +6,7 @@ import com.code.task.engine.common.IEventSchedule;
  * 定时服务提供者
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  */
 
 public interface ScheduleProvider extends IProvider {

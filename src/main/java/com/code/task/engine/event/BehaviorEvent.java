@@ -7,6 +7,7 @@ import com.code.task.engine.common.TaskContext;
  * 行为事件
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  **/
 public abstract class BehaviorEvent extends DefaultTaskEvent {
 

@@ -8,6 +8,7 @@ import java.util.Objects;
  * 定时调度行为
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  **/
 public interface ScheduleBehavior extends TaskBehavior {
 

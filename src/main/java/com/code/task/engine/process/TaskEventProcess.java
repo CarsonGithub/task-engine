@@ -14,6 +14,7 @@ import java.util.function.Consumer;
  * 任务携带事件驱动
  *
  * @author Carson
+ * @github https://github.com/CarsonGithub/task-engine.git
  **/
 public interface TaskEventProcess<T extends ITask, B extends TaskBehavior> extends TaskProcess<T, B> {
 
