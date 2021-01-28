@@ -3,6 +3,7 @@ package com.code.task.engine.provider;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -12,7 +13,8 @@ import java.util.Map;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  */
-public abstract class ServiceProvider implements ApplicationContextAware {
+@Component
+public class ServiceProvider implements ApplicationContextAware {
 
     private static ApplicationContext applicationContext;
 
