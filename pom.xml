@@ -15,21 +15,17 @@
         <java.version>1.8</java.version>
         <spring.version>5.1.19.RELEASE</spring.version>
         <slf4j.version>1.7.5</slf4j.version>
+        <lombok.version>1.18.16</lombok.version>
     </properties>
 
     <dependencies>
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.redisson</groupId>-->
-        <!--            <artifactId>redisson-spring-boot-starter</artifactId>-->
-        <!--            <version>3.10.5</version>-->
-        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -37,6 +33,7 @@
             <artifactId>spring-tx</artifactId>
             <version>${spring.version}</version>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -44,12 +41,14 @@
             <artifactId>slf4j-log4j12</artifactId>
             <version>${slf4j.version}</version>
             <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
             <optional>true</optional>
         </dependency>
 
