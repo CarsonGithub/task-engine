@@ -33,6 +33,6 @@ public interface TaskEventProcess<T extends ITask, B extends TaskBehavior> exten
     default void execute(TaskContext taskContext) {
         before(taskContext, context -> buildTaskEvent(getPreTaskEvents(context), ServiceProvider.event()::publish));
         executeBusiness(taskContext);
-        after(taskContext, context -> buildTaskEvent(getPreTaskEvents(context), ServiceProvider.event()::publish));
+        after(taskContext, context -> buildTaskEvent(getPostTaskEvents(context), ServiceProvider.event()::publish));
     }
 }
