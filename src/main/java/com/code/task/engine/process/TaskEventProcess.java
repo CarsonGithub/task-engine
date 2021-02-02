@@ -30,9 +30,12 @@ public interface TaskEventProcess<T extends ITask, B extends TaskBehavior> exten
     }
 
     @Override
-    default void execute(TaskContext taskContext) {
-        before(taskContext, context -> buildTaskEvent(getPreTaskEvents(context), ServiceProvider.event()::publish));
-        executeBusiness(taskContext);
-        after(taskContext, context -> buildTaskEvent(getPostTaskEvents(context), ServiceProvider.event()::publish));
+    default void before(TaskContext taskContext) {
+        doBefore(taskContext, context -> buildTaskEvent(getPreTaskEvents(context), ServiceProvider.event()::publish));
+    }
+
+    @Override
+    default void after(TaskContext taskContext) {
+        doAfter(taskContext, context -> buildTaskEvent(getPreTaskEvents(context), ServiceProvider.event()::publish));
     }
 }

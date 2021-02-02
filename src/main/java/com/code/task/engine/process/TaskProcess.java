@@ -60,10 +60,8 @@ public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IP
     /**
      * 生成上下文
      */
-    default TaskContext buildContext(T task, Consumer<TaskContext> consumer) {
-        TaskContext taskContext = doBuildContext(task);
-        consumer.accept(taskContext);
-        return taskContext;
+    default TaskContext buildContext(T task) {
+        return doBuildContext(task);
     }
 
     default void executeBusiness(TaskContext taskContext) {
@@ -74,25 +72,34 @@ public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IP
                         .forEach(behavior -> behavior.execute(taskContext)));
     }
 
-    default void before(TaskContext taskContext, Consumer<TaskContext> consumer) {
+    default void doBefore(TaskContext taskContext, Consumer<TaskContext> consumer) {
         Optional.ofNullable(consumer).ifPresent(c -> c.accept(taskContext));
     }
 
-    default void after(TaskContext taskContext, Consumer<TaskContext> consumer) {
+    default void doAfter(TaskContext taskContext, Consumer<TaskContext> consumer) {
         Optional.ofNullable(consumer).ifPresent(c -> c.accept(taskContext));
+    }
+
+    default void before(TaskContext taskContext) {
+        doBefore(taskContext, null);
+    }
+
+    default void after(TaskContext taskContext) {
+        doAfter(taskContext, null);
     }
 
 
     @Transactional(propagation = Propagation.REQUIRED)
     default void execute(TaskContext taskContext) {
-        before(taskContext, null);
+        buildPhases(taskContext);
+        before(taskContext);
         executeBusiness(taskContext);
-        after(taskContext, null);
+        after(taskContext);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     default void process(Supplier<T> supplier) {
-        execute(buildContext(supplier.get(), this::buildPhases));
+        execute(buildContext(supplier.get()));
     }
 }
