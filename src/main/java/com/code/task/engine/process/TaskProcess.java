@@ -102,4 +102,5 @@ public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IP
     default void process(Supplier<T> supplier) {
         execute(buildContext(supplier.get()));
     }
+
 }
