@@ -34,4 +34,6 @@ public interface IProcessFactory {
         getProcess(taskReq.getProcess()).process(() -> taskReq);
     }
 
+    void process(ITaskReq taskReq);
+
 }
