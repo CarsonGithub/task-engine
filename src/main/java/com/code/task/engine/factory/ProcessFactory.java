@@ -3,6 +3,7 @@ package com.code.task.engine.factory;
 import com.code.task.engine.common.ITaskReq;
 import com.code.task.engine.process.IProcess;
 import com.code.task.engine.provider.ServiceProvider;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 @SuppressWarnings({"unchecked", "rawtypes"})
 @Component
+@DependsOn("serviceProvider")
 public class ProcessFactory {
 
     public static Map<String, IProcess> bMap;

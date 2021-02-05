@@ -9,7 +9,6 @@ import com.code.task.engine.process.IProcess;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-
 @SuppressWarnings("rawtypes")
 public abstract class ProcessEvent extends DefaultTaskEvent {
 

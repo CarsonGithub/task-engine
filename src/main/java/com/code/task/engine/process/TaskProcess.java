@@ -3,7 +3,6 @@ package com.code.task.engine.process;
 import com.code.task.engine.behavior.TaskBehavior;
 import com.code.task.engine.common.ITask;
 import com.code.task.engine.common.TaskContext;
-import com.code.task.engine.provider.ServiceProvider;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,9 +10,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -25,9 +21,6 @@ import java.util.stream.Collectors;
  **/
 public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IProcess<T> {
 
-    /**
-     * 获取业务行为类型
-     */
     @SuppressWarnings("unchecked")
     default Class<B> getTaskBehaviorClass() {
         Type[] types = this.getClass().getGenericInterfaces();
@@ -42,51 +35,18 @@ public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IP
         }
     }
 
-    /**
-     * 注入方言
-     */
     default void buildPhases(TaskContext taskContext) {
         Field[] fields = getTaskBehaviorClass().getDeclaredFields();
         taskContext.getPhases().addAll(Arrays.stream(fields).map(Field::getName).collect(Collectors.toList()));
     }
 
-    /**
-     * 执行上下文初始化
-     */
-    default TaskContext doBuildContext(T task) {
-        return new TaskContext(task);
-    }
+    TaskContext buildContext(T task);
 
-    /**
-     * 生成上下文
-     */
-    default TaskContext buildContext(T task) {
-        return doBuildContext(task);
-    }
+    void executeBusiness(TaskContext taskContext);
 
-    default void executeBusiness(TaskContext taskContext) {
-        Optional.of(ServiceProvider.getBeansOfType(getTaskBehaviorClass()))
-                .ifPresent(map -> map.values()
-                        .stream()
-                        .sorted(Comparator.comparingInt(TaskBehavior::getOrder))
-                        .forEach(behavior -> behavior.execute(taskContext)));
-    }
+    void before(TaskContext taskContext);
 
-    default void doBefore(TaskContext taskContext, Consumer<TaskContext> consumer) {
-        Optional.ofNullable(consumer).ifPresent(c -> c.accept(taskContext));
-    }
-
-    default void doAfter(TaskContext taskContext, Consumer<TaskContext> consumer) {
-        Optional.ofNullable(consumer).ifPresent(c -> c.accept(taskContext));
-    }
-
-    default void before(TaskContext taskContext) {
-        doBefore(taskContext, null);
-    }
-
-    default void after(TaskContext taskContext) {
-        doAfter(taskContext, null);
-    }
+    void after(TaskContext taskContext);
 
 
     @Transactional(propagation = Propagation.REQUIRED)

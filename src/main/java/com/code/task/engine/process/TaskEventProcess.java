@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface TaskEventProcess<T extends ITask, B extends TaskBehavior> extends TaskProcess<T, B> {
+public interface TaskEventProcess<T extends ITask, B extends TaskBehavior> extends TaskActionProcess<T, B> {
 
     List<TaskEvent> getPreTaskEvents(TaskContext taskContext);
 
@@ -36,6 +36,6 @@ public interface TaskEventProcess<T extends ITask, B extends TaskBehavior> exten
 
     @Override
     default void after(TaskContext taskContext) {
-        doAfter(taskContext, context -> buildTaskEvent(getPreTaskEvents(context), ServiceProvider.event()::publish));
+        doAfter(taskContext, context -> buildTaskEvent(getPostTaskEvents(context), ServiceProvider.event()::publish));
     }
 }

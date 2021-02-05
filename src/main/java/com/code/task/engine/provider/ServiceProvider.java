@@ -38,4 +38,9 @@ public class ServiceProvider implements ApplicationContextAware {
     public static EventProvider event() {
         return (EventProvider) applicationContext.getBean(EventProvider.Event_Provider);
     }
+
+    public static LockProvider lock() {
+        return (LockProvider) applicationContext.getBean(LockProvider.Lock_Provider);
+    }
+
 }

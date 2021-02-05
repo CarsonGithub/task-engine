@@ -7,6 +7,7 @@ import com.code.task.engine.event.TaskEvent;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * 业务可扩展接口
@@ -14,7 +15,7 @@ import java.util.List;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface BusinessProcess<T extends ITask, B extends TaskBehavior> extends TaskEventProcess<T, B> {
+public interface BusinessProcess<T extends ITask, B extends TaskBehavior> extends TaskLockProcess<T, B> {
 
     /**
      * 获取前置任务事件
@@ -30,5 +31,13 @@ public interface BusinessProcess<T extends ITask, B extends TaskBehavior> extend
     @Override
     default List<TaskEvent> getPostTaskEvents(TaskContext taskContext) {
         return Collections.emptyList();
+    }
+
+    /**
+     * 锁key值
+     */
+    @Override
+    default String lockKey(Supplier<TaskContext> supplier) {
+        return null;
     }
 }
