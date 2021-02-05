@@ -3,10 +3,11 @@ package com.code.task.engine.factory;
 import com.code.task.engine.common.ITaskReq;
 import com.code.task.engine.process.IProcess;
 import com.code.task.engine.provider.ServiceProvider;
+import com.code.task.engine.provider.DefaultServiceProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -18,8 +19,11 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 @SuppressWarnings({"unchecked", "rawtypes"})
 @Component
-@DependsOn("serviceProvider")
-public class ProcessFactory {
+@DependsOn(DefaultServiceProvider.Service_Provider)
+public class ProcessFactory implements IProcessFactory {
+
+    @Autowired
+    private ServiceProvider serviceProvider;
 
     public static Map<String, IProcess> bMap;
 
@@ -27,19 +31,18 @@ public class ProcessFactory {
         bMap = new ConcurrentHashMap<>(32);
     }
 
-    @PostConstruct
-    public void initProcess() {
-        ServiceProvider.getBeansOfType(IProcess.class)
-                .values()
-                .forEach(process -> bMap.put(process.getPhase(), process));
+    @Override
+    public ServiceProvider getProvider() {
+        return serviceProvider;
     }
 
-    public static IProcess getBehavior(String name) {
-        return bMap.get(name);
+    @Override
+    public Map<String, IProcess> processMap() {
+        return bMap;
     }
 
-    public static void process(ITaskReq taskReq) {
-        getBehavior(taskReq.getProcess()).process(() -> taskReq);
+    public void process(ITaskReq taskReq) {
+        doProcess(taskReq);
     }
 
 }

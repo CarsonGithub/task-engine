@@ -1,5 +1,6 @@
 package com.code.task.engine.common;
 
+import com.code.task.engine.provider.ServiceProvider;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -31,13 +32,20 @@ public class TaskContext {
     @Setter
     private boolean forceStop;
 
+    private final ServiceProvider serviceProvider;
+
     private final Map<String, Object> contextPrams;
 
-    public TaskContext(ITask task) {
+    public TaskContext(ITask task, ServiceProvider serviceProvider) {
         this.task = Objects.requireNonNull(task, "任务实体不能为空!");
         this.phases = new LinkedList<>();
         this.contextPrams = new LinkedHashMap<>(1);
         this.ignorePhases = new ArrayList<>(0);
+        this.serviceProvider = serviceProvider;
+    }
+
+    public ServiceProvider serviceProvider() {
+        return serviceProvider;
     }
 
     public void appendIgnores(String phase) {

@@ -4,7 +4,6 @@ import com.code.task.engine.behavior.TaskBehavior;
 import com.code.task.engine.common.ITask;
 import com.code.task.engine.common.TaskContext;
 import com.code.task.engine.function.LockFunction;
-import com.code.task.engine.provider.ServiceProvider;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
@@ -32,10 +31,11 @@ public interface TaskLockProcess<T extends ITask, B extends TaskBehavior> extend
     default void executeWithLock(Supplier<TaskContext> supplier) {
         Optional<Object> optional = getAndSetLock(supplier);
         if (optional.isPresent()) {
+            TaskContext taskContext = supplier.get();
             try {
-                boolean isLock = ServiceProvider.lock().tryLock(optional.get());
+                boolean isLock = taskContext.serviceProvider().lock().tryLock(optional.get());
                 if (isLock) {
-                    doExecuteBusiness(supplier.get());
+                    doExecuteBusiness(taskContext);
                 }
             } catch (Exception e) {
                 Thread.currentThread().interrupt();
@@ -50,14 +50,14 @@ public interface TaskLockProcess<T extends ITask, B extends TaskBehavior> extend
 
     @Override
     default Optional<Object> getAndSetLock(Supplier<TaskContext> supplier) {
-        Object lock = ServiceProvider.lock().getLock(lockKey(supplier));
+        Object lock = supplier.get().serviceProvider().lock().getLock(lockKey(supplier));
         supplier.get().put(lockKey(supplier), lock);
         return Optional.ofNullable(lock);
     }
 
     @Override
     default void releaseLock(Supplier<TaskContext> supplier) {
-        ServiceProvider.lock().releaseLock(supplier.get().get(lockKey(supplier)));
+        supplier.get().serviceProvider().lock().releaseLock(supplier.get().get(lockKey(supplier)));
     }
 
 }

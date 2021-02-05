@@ -3,7 +3,6 @@ package com.code.task.engine.event;
 import com.code.task.engine.common.TaskContext;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.context.ApplicationEvent;
 
 import java.util.Objects;
 
@@ -13,7 +12,7 @@ import java.util.Objects;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public abstract class DefaultTaskEvent extends ApplicationEvent implements TaskEvent {
+public abstract class DefaultTaskEvent implements TaskEvent {
 
     @Getter
     private final Class<?> clazz;
@@ -25,7 +24,6 @@ public abstract class DefaultTaskEvent extends ApplicationEvent implements TaskE
     private Boolean async;
 
     public DefaultTaskEvent(TaskContext object, Class<?> clazz, Boolean isAsync) {
-        super(object);
         this.clazz = clazz;
         this.source = object;
         if (Objects.isNull(isAsync)) {

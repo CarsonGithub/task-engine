@@ -4,7 +4,6 @@ import com.code.task.engine.behavior.TaskBehavior;
 import com.code.task.engine.common.ITask;
 import com.code.task.engine.common.TaskContext;
 import com.code.task.engine.event.TaskEvent;
-import com.code.task.engine.provider.ServiceProvider;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
@@ -31,11 +30,11 @@ public interface TaskEventProcess<T extends ITask, B extends TaskBehavior> exten
 
     @Override
     default void before(TaskContext taskContext) {
-        doBefore(taskContext, context -> buildTaskEvent(getPreTaskEvents(context), ServiceProvider.event()::publish));
+        doBefore(taskContext, context -> buildTaskEvent(getPreTaskEvents(context), taskContext.serviceProvider().event()::publish));
     }
 
     @Override
     default void after(TaskContext taskContext) {
-        doAfter(taskContext, context -> buildTaskEvent(getPostTaskEvents(context), ServiceProvider.event()::publish));
+        doAfter(taskContext, context -> buildTaskEvent(getPostTaskEvents(context), taskContext.serviceProvider().event()::publish));
     }
 }

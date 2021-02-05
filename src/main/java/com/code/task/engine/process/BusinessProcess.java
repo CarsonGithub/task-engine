@@ -40,4 +40,5 @@ public interface BusinessProcess<T extends ITask, B extends TaskBehavior> extend
     default String lockKey(Supplier<TaskContext> supplier) {
         return null;
     }
+
 }

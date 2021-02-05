@@ -1,6 +1,7 @@
 package com.code.task.engine.provider;
 
 import com.code.task.engine.event.TaskEvent;
+import com.code.task.engine.event.TaskEventListener;
 
 /**
  * 事件服务提供者
@@ -9,7 +10,7 @@ import com.code.task.engine.event.TaskEvent;
  * @github https://github.com/CarsonGithub/task-engine.git
  */
 
-public interface EventProvider extends IProvider {
+public interface EventProvider extends IProvider, TaskEventListener {
 
     String Event_Provider = "eventProvider";
 

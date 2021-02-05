@@ -3,6 +3,7 @@ package com.code.task.engine.process;
 import com.code.task.engine.behavior.TaskBehavior;
 import com.code.task.engine.common.ITask;
 import com.code.task.engine.common.TaskContext;
+import com.code.task.engine.provider.ServiceProvider;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,8 @@ public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IP
         Field[] fields = getTaskBehaviorClass().getDeclaredFields();
         taskContext.getPhases().addAll(Arrays.stream(fields).map(Field::getName).collect(Collectors.toList()));
     }
+
+    ServiceProvider serviceProvider();
 
     TaskContext buildContext(T task);
 

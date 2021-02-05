@@ -1,10 +1,5 @@
 package com.code.task.engine.provider;
 
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.stereotype.Component;
-
 import java.util.Map;
 
 /**
@@ -13,34 +8,23 @@ import java.util.Map;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  */
-@Component
-public class ServiceProvider implements ApplicationContextAware {
+public interface ServiceProvider extends IProvider {
 
-    private static ApplicationContext applicationContext;
+    String Service_Provider = "serviceProvider";
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ServiceProvider.applicationContext = applicationContext;
+    default String getName() {
+        return Service_Provider;
     }
 
-    public static <T> T getBean(Class<T> clz) throws BeansException {
-        return applicationContext.getBean(clz);
-    }
+    <T> T getBean(Class<T> clz);
 
-    public static <T> Map<String, T> getBeansOfType(Class<T> tClass) {
-        return applicationContext.getBeansOfType(tClass);
-    }
+    <T> Map<String, T> getBeansOfType(Class<T> tClass);
 
-    public static ScheduleProvider schedule() {
-        return (ScheduleProvider) applicationContext.getBean(ScheduleProvider.Schedule_Provider);
-    }
+    ScheduleProvider schedule();
 
-    public static EventProvider event() {
-        return (EventProvider) applicationContext.getBean(EventProvider.Event_Provider);
-    }
+    EventProvider event();
 
-    public static LockProvider lock() {
-        return (LockProvider) applicationContext.getBean(LockProvider.Lock_Provider);
-    }
+    <T> LockProvider<T> lock();
 
 }
