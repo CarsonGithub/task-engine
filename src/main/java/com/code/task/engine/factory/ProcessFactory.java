@@ -3,7 +3,6 @@ package com.code.task.engine.factory;
 import com.code.task.engine.common.ITaskReq;
 import com.code.task.engine.process.IProcess;
 import com.code.task.engine.provider.ServiceProvider;
-import com.code.task.engine.provider.DefaultServiceProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -17,9 +16,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({"rawtypes"})
 @Component
-@DependsOn(DefaultServiceProvider.Service_Provider)
+@DependsOn(ServiceProvider.Service_Provider)
 public class ProcessFactory implements IProcessFactory {
 
     @Autowired
