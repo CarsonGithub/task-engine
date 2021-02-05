@@ -16,6 +16,8 @@ import java.util.Map;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public interface IProcessFactory {
 
+    String Process_Factory = "processFactory";
+
     ServiceProvider getProvider();
 
     Map<String, IProcess> processMap();

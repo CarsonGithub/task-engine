@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.code.task.engine.factory.IProcessFactory.Process_Factory;
+
 /**
  * 驱动工厂
  *
@@ -17,7 +19,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
 @SuppressWarnings({"rawtypes"})
-@Component
+@Component(Process_Factory)
 @DependsOn(ServiceProvider.Service_Provider)
 public class ProcessFactory implements IProcessFactory {
 
