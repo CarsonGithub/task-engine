@@ -6,6 +6,7 @@ import com.code.task.engine.provider.ServiceProvider;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 驱动工厂
@@ -16,8 +17,6 @@ import java.util.Map;
 @SuppressWarnings({"unchecked", "rawtypes"})
 public interface IProcessFactory {
 
-    String Process_Factory = "processFactory";
-
     ServiceProvider getProvider();
 
     Map<String, IProcess> processMap();
@@ -25,7 +24,11 @@ public interface IProcessFactory {
     @PostConstruct
     default void initProcess() {
         getProvider().getBeansOfType(IProcess.class).values()
-                .forEach(process -> processMap().put(process.getPhase(), process));
+                .forEach(process -> {
+                    if (Objects.nonNull(process.getPhase())) {
+                        processMap().put(process.getPhase(), process);
+                    }
+                });
     }
 
     default IProcess getProcess(String name) {
