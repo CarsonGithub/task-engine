@@ -2,7 +2,7 @@ package com.code.task.engine.process;
 
 import com.code.task.engine.behavior.TaskBehavior;
 import com.code.task.engine.common.ITask;
-import com.code.task.engine.common.TaskContext;
+import com.code.task.engine.common.ITaskContext;
 
 import java.util.Comparator;
 import java.util.Optional;
@@ -14,13 +14,11 @@ import java.util.function.Consumer;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface TaskActionProcess<T extends ITask, B extends TaskBehavior> extends TaskProcess<T, B> {
+public interface TaskActionProcess<T, U, K extends ITask<T>, B extends TaskBehavior<T, U>> extends TaskProcess<T, U, K, B> {
 
-    default TaskContext doBuildContext(T task) {
-        return new TaskContext(task, serviceProvider());
-    }
+    ITaskContext<T, U> doBuildContext(K task);
 
-    default void doExecuteBusiness(TaskContext taskContext) {
+    default void doExecuteBusiness(ITaskContext<T, U> taskContext) {
         Optional.of(taskContext.serviceProvider().getBeansOfType(getTaskBehaviorClass()))
                 .ifPresent(map -> map.values()
                         .stream()
@@ -28,31 +26,31 @@ public interface TaskActionProcess<T extends ITask, B extends TaskBehavior> exte
                         .forEach(behavior -> behavior.execute(taskContext)));
     }
 
-    default void doBefore(TaskContext taskContext, Consumer<TaskContext> consumer) {
+    default void doBefore(ITaskContext<T, U> taskContext, Consumer<ITaskContext<T, U>> consumer) {
         Optional.ofNullable(consumer).ifPresent(c -> c.accept(taskContext));
     }
 
-    default void doAfter(TaskContext taskContext, Consumer<TaskContext> consumer) {
+    default void doAfter(ITaskContext<T, U> taskContext, Consumer<ITaskContext<T, U>> consumer) {
         Optional.ofNullable(consumer).ifPresent(c -> c.accept(taskContext));
     }
 
     @Override
-    default TaskContext buildContext(T task) {
+    default ITaskContext<T, U> buildContext(K task) {
         return doBuildContext(task);
     }
 
     @Override
-    default void executeBusiness(TaskContext taskContext) {
+    default void executeBusiness(ITaskContext<T, U> taskContext) {
         doExecuteBusiness(taskContext);
     }
 
     @Override
-    default void before(TaskContext taskContext) {
+    default void before(ITaskContext<T, U> taskContext) {
         doBefore(taskContext, null);
     }
 
     @Override
-    default void after(TaskContext taskContext) {
+    default void after(ITaskContext<T, U> taskContext) {
         doAfter(taskContext, null);
     }
 

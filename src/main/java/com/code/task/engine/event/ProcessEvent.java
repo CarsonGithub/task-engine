@@ -1,6 +1,6 @@
 package com.code.task.engine.event;
 
-import com.code.task.engine.common.TaskContext;
+import com.code.task.engine.common.ITaskContext;
 import com.code.task.engine.process.IProcess;
 
 /**
@@ -10,13 +10,13 @@ import com.code.task.engine.process.IProcess;
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
 @SuppressWarnings("rawtypes")
-public abstract class ProcessEvent extends DefaultTaskEvent {
+public abstract class ProcessEvent<T, U> extends DefaultTaskEvent<T, U> {
 
-    public <P extends IProcess> ProcessEvent(TaskContext taskContext, Class<P> clazz) {
+    public <P extends IProcess> ProcessEvent(ITaskContext<T, U> taskContext, Class<P> clazz) {
         super(taskContext, clazz, false);
     }
 
-    public <P extends IProcess> ProcessEvent(TaskContext taskContext, Class<P> clazz, Boolean isAsync) {
+    public <P extends IProcess> ProcessEvent(ITaskContext<T, U> taskContext, Class<P> clazz, Boolean isAsync) {
         super(taskContext, clazz, isAsync);
     }
 

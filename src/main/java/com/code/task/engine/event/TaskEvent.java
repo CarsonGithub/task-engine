@@ -1,6 +1,6 @@
 package com.code.task.engine.event;
 
-import com.code.task.engine.common.TaskContext;
+import com.code.task.engine.common.ITaskContext;
 
 /**
  * 任务事件
@@ -8,11 +8,11 @@ import com.code.task.engine.common.TaskContext;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface TaskEvent {
+public interface TaskEvent<T, U> {
 
     Class<?> getClazz();
 
     Boolean getAsync();
 
-    TaskContext getSource();
+    ITaskContext<T, U> getSource();
 }

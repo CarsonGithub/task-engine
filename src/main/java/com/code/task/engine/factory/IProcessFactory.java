@@ -3,10 +3,12 @@ package com.code.task.engine.factory;
 import com.code.task.engine.common.ITaskReq;
 import com.code.task.engine.process.IProcess;
 import com.code.task.engine.provider.ServiceProvider;
+import org.springframework.context.annotation.DependsOn;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 驱动工厂
@@ -14,12 +16,13 @@ import java.util.Objects;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-@SuppressWarnings({"unchecked", "rawtypes"})
-public interface IProcessFactory {
+@SuppressWarnings({"rawtypes"})
+@DependsOn(ServiceProvider.Service_Provider)
+public interface IProcessFactory<T, U, K extends ITaskReq<T>> {
 
-    ServiceProvider getProvider();
+    ServiceProvider<T, U> getProvider();
 
-    Map<String, IProcess> processMap();
+    Map<String, IProcess<K>> processMap();
 
     @PostConstruct
     default void initProcess() {
@@ -31,14 +34,19 @@ public interface IProcessFactory {
                 });
     }
 
-    default IProcess getProcess(String name) {
+    default IProcess<K> getProcess(String name) {
         return processMap().get(name);
     }
 
-    default void doProcess(ITaskReq taskReq) {
-        getProcess(taskReq.getProcess()).process(() -> taskReq);
+    default void doProcess(K taskReq) {
+        Optional<IProcess<K>> optional = Optional.ofNullable(getProcess(taskReq.getProcess()));
+        if (optional.isPresent()) {
+            optional.get().process(() -> taskReq);
+        } else {
+            throw new RuntimeException("找不到驱动:" + taskReq.getProcess());
+        }
     }
 
-    void process(ITaskReq taskReq);
+    void process(K taskReq);
 
 }

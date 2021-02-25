@@ -1,6 +1,6 @@
 package com.code.task.engine.provider;
 
-import com.code.task.engine.common.IEventSchedule;
+import com.code.task.engine.common.IProcessSchedule;
 
 /**
  * 定时服务提供者
@@ -9,7 +9,7 @@ import com.code.task.engine.common.IEventSchedule;
  * @github https://github.com/CarsonGithub/task-engine.git
  */
 
-public interface ScheduleProvider extends IProvider {
+public interface ScheduleProvider<T> extends IProvider {
 
     String Schedule_Provider = "scheduleProvider";
 
@@ -18,11 +18,11 @@ public interface ScheduleProvider extends IProvider {
         return "scheduleProvider";
     }
 
-    void init(IEventSchedule schedule);
+    void init(IProcessSchedule<T> schedule);
 
-    void notify(IEventSchedule schedule);
+    void notify(IProcessSchedule<T> schedule);
 
-    void suspend(IEventSchedule schedule);
+    void suspend(IProcessSchedule<T> schedule);
 
-    void remove(IEventSchedule schedule);
+    void remove(IProcessSchedule<T> schedule);
 }

@@ -8,7 +8,7 @@ import java.util.Map;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  */
-public interface ServiceProvider extends IProvider {
+public interface ServiceProvider<T, U> extends IProvider {
 
     String Service_Provider = "serviceProvider";
 
@@ -17,14 +17,18 @@ public interface ServiceProvider extends IProvider {
         return Service_Provider;
     }
 
-    <T> T getBean(Class<T> clz);
+    <B> B getBean(String clzName);
 
-    <T> Map<String, T> getBeansOfType(Class<T> tClass);
+    <B> B getBean(Class<B> clz);
 
-    ScheduleProvider schedule();
+    <B> Map<String, B> getBeansOfType(Class<B> tClass);
 
-    EventProvider event();
+    MessageProvider<T, U> message();
 
-    <T> LockProvider<T> lock();
+    ScheduleProvider<T> schedule();
+
+    EventProvider<T, U> event();
+
+    <L> LockProvider<L> lock();
 
 }

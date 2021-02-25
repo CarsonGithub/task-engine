@@ -6,8 +6,8 @@ package com.code.task.engine.common;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface ITask {
+public interface ITask<T> {
 
-    Long getId();
+    T getId();
 
 }

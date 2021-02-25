@@ -8,7 +8,7 @@ import java.util.function.Supplier;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface IProcess<T> {
+public interface IProcess<K> {
 
     /**
      * 所属方言
@@ -18,6 +18,6 @@ public interface IProcess<T> {
     /**
      * 驱动任务
      */
-    void process(Supplier<T> supplier);
+    void process(Supplier<K> supplier);
 
 }

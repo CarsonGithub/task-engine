@@ -10,7 +10,7 @@ import com.code.task.engine.event.TaskEventListener;
  * @github https://github.com/CarsonGithub/task-engine.git
  */
 
-public interface EventProvider extends IProvider, TaskEventListener {
+public interface EventProvider<T, U> extends IProvider, TaskEventListener<T, U> {
 
     String Event_Provider = "eventProvider";
 
@@ -19,7 +19,7 @@ public interface EventProvider extends IProvider, TaskEventListener {
         return Event_Provider;
     }
 
-    void publish(TaskEvent event);
+    void publish(TaskEvent<T, U> event);
 
     void publishByName(String eventClass);
 }

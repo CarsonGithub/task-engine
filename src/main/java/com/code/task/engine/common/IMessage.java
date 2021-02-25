@@ -1,17 +1,21 @@
 package com.code.task.engine.common;
 
 /**
- * 定时调度原子
+ * 消息对象
  *
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface ISchedule<T> {
+public interface IMessage<T, U> {
 
     T getTaskId();
 
-    T getParentId();
+    String getTitle();
 
-    Long getCronTime();
+    String getContent();
+
+    U[] getUserIds();
+
+    Integer getMsgType();
 
 }

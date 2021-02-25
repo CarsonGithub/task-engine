@@ -2,8 +2,7 @@ package com.code.task.engine.process;
 
 import com.code.task.engine.behavior.TaskBehavior;
 import com.code.task.engine.common.ITask;
-import com.code.task.engine.common.TaskContext;
-import com.code.task.engine.provider.ServiceProvider;
+import com.code.task.engine.common.ITaskContext;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -20,13 +20,22 @@ import java.util.stream.Collectors;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IProcess<T> {
+public interface TaskProcess<T, U, K extends ITask<T>, B extends TaskBehavior<T, U>> extends IProcess<K> {
 
     @SuppressWarnings("unchecked")
     default Class<B> getTaskBehaviorClass() {
-        Type[] types = this.getClass().getGenericInterfaces();
-        ParameterizedType parameterizedType = (ParameterizedType) types[0];
-        Type type = parameterizedType.getActualTypeArguments()[1];
+        Class<?> clazz = this.getClass();
+        Type[] actualTypeArguments;
+        Type type;
+        if (Objects.nonNull(clazz.getSuperclass())) {
+            ParameterizedType genericSuperclass = (ParameterizedType) this.getClass().getGenericSuperclass();
+            actualTypeArguments = genericSuperclass.getActualTypeArguments();
+            type = actualTypeArguments[0];
+        } else {
+            actualTypeArguments = clazz.getGenericInterfaces();
+            ParameterizedType parameterizedType = (ParameterizedType) actualTypeArguments[0];
+            type = parameterizedType.getActualTypeArguments()[1];
+        }
         try {
             return (Class<B>) type;
         } catch (ClassCastException e) {
@@ -36,24 +45,22 @@ public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IP
         }
     }
 
-    default void buildPhases(TaskContext taskContext) {
+    default void buildPhases(ITaskContext<T, U> taskContext) {
         Field[] fields = getTaskBehaviorClass().getDeclaredFields();
+        taskContext.getPhases().clear();
         taskContext.getPhases().addAll(Arrays.stream(fields).map(Field::getName).collect(Collectors.toList()));
     }
 
-    ServiceProvider serviceProvider();
+    ITaskContext<T, U> buildContext(K task);
 
-    TaskContext buildContext(T task);
+    void executeBusiness(ITaskContext<T, U> taskContext);
 
-    void executeBusiness(TaskContext taskContext);
+    void before(ITaskContext<T, U> taskContext);
 
-    void before(TaskContext taskContext);
-
-    void after(TaskContext taskContext);
-
+    void after(ITaskContext<T, U> taskContext);
 
     @Transactional(propagation = Propagation.REQUIRED)
-    default void execute(TaskContext taskContext) {
+    default void execute(ITaskContext<T, U> taskContext) {
         buildPhases(taskContext);
         before(taskContext);
         executeBusiness(taskContext);
@@ -62,7 +69,7 @@ public interface TaskProcess<T extends ITask, B extends TaskBehavior> extends IP
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
-    default void process(Supplier<T> supplier) {
+    default void process(Supplier<K> supplier) {
         execute(buildContext(supplier.get()));
     }
 

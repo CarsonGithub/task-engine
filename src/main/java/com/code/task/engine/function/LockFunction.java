@@ -8,14 +8,14 @@ import java.util.function.Supplier;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface LockFunction<T> {
+public interface LockFunction<C> {
 
-    String lockKey(Supplier<T> supplier);
+    String lockKey(Supplier<C> supplier);
 
-    void executeWithLock(Supplier<T> supplier);
+    void executeWithLock(Supplier<C> supplier);
 
-    Object getAndSetLock(Supplier<T> supplier);
+    Object getAndSetLock(Supplier<C> supplier);
 
-    void releaseLock(Supplier<T> supplier);
+    void releaseLock(Supplier<C> supplier);
 
 }

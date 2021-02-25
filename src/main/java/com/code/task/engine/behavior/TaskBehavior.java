@@ -1,6 +1,6 @@
 package com.code.task.engine.behavior;
 
-import com.code.task.engine.common.TaskContext;
+import com.code.task.engine.common.ITaskContext;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Objects;
@@ -11,7 +11,7 @@ import java.util.Objects;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface TaskBehavior extends IBehavior {
+public interface TaskBehavior<T, U> extends IBehavior<T, U> {
 
     /**
      * 执行顺序
@@ -24,7 +24,7 @@ public interface TaskBehavior extends IBehavior {
      * 任务匹配
      */
     @Override
-    default boolean support(TaskContext taskContext) {
+    default boolean support(ITaskContext<T, U> taskContext) {
         return !taskContext.getIgnorePhases().contains(getPhase()) &&
                 !CollectionUtils.isEmpty(taskContext.getPhases()) &&
                 Objects.equals(taskContext.getPhases().get(getOrder()), getPhase());

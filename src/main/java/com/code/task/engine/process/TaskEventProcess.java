@@ -2,7 +2,7 @@ package com.code.task.engine.process;
 
 import com.code.task.engine.behavior.TaskBehavior;
 import com.code.task.engine.common.ITask;
-import com.code.task.engine.common.TaskContext;
+import com.code.task.engine.common.ITaskContext;
 import com.code.task.engine.event.TaskEvent;
 import org.springframework.util.CollectionUtils;
 
@@ -15,13 +15,13 @@ import java.util.function.Consumer;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface TaskEventProcess<T extends ITask, B extends TaskBehavior> extends TaskActionProcess<T, B> {
+public interface TaskEventProcess<T, U, K extends ITask<T>, B extends TaskBehavior<T, U>> extends TaskActionProcess<T, U, K, B> {
 
-    List<TaskEvent> getPreTaskEvents(TaskContext taskContext);
+    List<TaskEvent<T, U>> getPreTaskEvents(ITaskContext<T, U> taskContext);
 
-    List<TaskEvent> getPostTaskEvents(TaskContext taskContext);
+    List<TaskEvent<T, U>> getPostTaskEvents(ITaskContext<T, U> taskContext);
 
-    default <E extends TaskEvent> void buildTaskEvent(List<E> events, Consumer<TaskEvent> consumer) {
+    default <E extends TaskEvent<T, U>> void buildTaskEvent(List<E> events, Consumer<TaskEvent<T, U>> consumer) {
         if (CollectionUtils.isEmpty(events)) {
             return;
         }
@@ -29,12 +29,12 @@ public interface TaskEventProcess<T extends ITask, B extends TaskBehavior> exten
     }
 
     @Override
-    default void before(TaskContext taskContext) {
+    default void before(ITaskContext<T, U> taskContext) {
         doBefore(taskContext, context -> buildTaskEvent(getPreTaskEvents(context), taskContext.serviceProvider().event()::publish));
     }
 
     @Override
-    default void after(TaskContext taskContext) {
+    default void after(ITaskContext<T, U> taskContext) {
         doAfter(taskContext, context -> buildTaskEvent(getPostTaskEvents(context), taskContext.serviceProvider().event()::publish));
     }
 }

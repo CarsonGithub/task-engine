@@ -7,7 +7,7 @@ package com.code.task.engine.common;
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
 
-public interface ITaskReq extends ITask {
+public interface ITaskReq<T> extends ITask<T> {
 
     String getProcess();
 

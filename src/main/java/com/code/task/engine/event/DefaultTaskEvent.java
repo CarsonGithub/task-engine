@@ -1,6 +1,6 @@
 package com.code.task.engine.event;
 
-import com.code.task.engine.common.TaskContext;
+import com.code.task.engine.common.ITaskContext;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,18 +12,18 @@ import java.util.Objects;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public abstract class DefaultTaskEvent implements TaskEvent {
+public abstract class DefaultTaskEvent<T, U> implements TaskEvent<T, U> {
 
     @Getter
     private final Class<?> clazz;
 
     @Getter
-    private final TaskContext source;
+    private final ITaskContext<T, U> source;
 
     @Setter
     private Boolean async;
 
-    public DefaultTaskEvent(TaskContext object, Class<?> clazz, Boolean isAsync) {
+    public DefaultTaskEvent(ITaskContext<T, U> object, Class<?> clazz, Boolean isAsync) {
         this.clazz = clazz;
         this.source = object;
         if (Objects.isNull(isAsync)) {

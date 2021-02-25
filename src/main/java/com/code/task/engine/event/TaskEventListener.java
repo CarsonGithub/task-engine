@@ -11,11 +11,11 @@ import java.util.Optional;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public interface TaskEventListener {
+public interface TaskEventListener<T, U> {
 
-    void listen(TaskEvent event);
+    void listen(TaskEvent<T, U> event);
 
-    default void doListener(TaskEvent event) {
+    default void doListener(TaskEvent<T, U> event) {
         if (event.getAsync()) {
             runAsync(event);
         } else {
@@ -23,19 +23,19 @@ public interface TaskEventListener {
         }
     }
 
-    @SuppressWarnings({"rawtypes"})
-    default void runSync(TaskEvent event) {
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    default void runSync(TaskEvent<T, U> event) {
         Class<?> clazz = event.getClazz();
         Optional.of(event.getSource().serviceProvider().getBean(clazz)).ifPresent(executor -> {
             if (executor instanceof TaskBehavior) {
-                ((TaskBehavior) executor).execute(event.getSource());
+                ((TaskBehavior<T, U>) executor).execute(event.getSource());
             } else if (executor instanceof TaskProcess) {
                 ((TaskProcess) executor).execute(event.getSource());
             }
         });
     }
 
-    default void runAsync(TaskEvent event) {
+    default void runAsync(TaskEvent<T, U> event) {
         Class<?> clazz = event.getClazz();
         // todo
     }
