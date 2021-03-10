@@ -8,6 +8,8 @@ package com.code.task.engine.common;
  **/
 public interface IEventSchedule<T> extends ISchedule<T> {
 
-    String getEventClass();
+    ITaskContext<?,?> getTaskContext();
+
+    Class<?> getEventClass();
 
 }

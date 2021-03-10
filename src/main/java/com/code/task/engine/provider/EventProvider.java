@@ -21,5 +21,5 @@ public interface EventProvider<T, U> extends IProvider, TaskEventListener<T, U> 
 
     void publish(TaskEvent<T, U> event);
 
-    void publishByName(String eventClass);
+    void publishByName(String jsonTaskContext, String eventClass, String taskClass);
 }

@@ -1,6 +1,6 @@
 package com.code.task.engine.provider;
 
-import com.code.task.engine.common.IProcessSchedule;
+import com.code.task.engine.common.ISchedule;
 
 /**
  * 定时服务提供者
@@ -11,6 +11,8 @@ import com.code.task.engine.common.IProcessSchedule;
 
 public interface ScheduleProvider<T> extends IProvider {
 
+    String Key_Schedule_Id = "scheduleId";
+
     String Schedule_Provider = "scheduleProvider";
 
     @Override
@@ -18,11 +20,11 @@ public interface ScheduleProvider<T> extends IProvider {
         return "scheduleProvider";
     }
 
-    void init(IProcessSchedule<T> schedule);
+    void init(ISchedule<T> schedule);
 
-    void notify(IProcessSchedule<T> schedule);
+    void notify(ISchedule<T> schedule);
 
-    void suspend(IProcessSchedule<T> schedule);
+    void suspend(ISchedule<T> schedule);
 
-    void remove(IProcessSchedule<T> schedule);
+    void remove(ISchedule<T> schedule);
 }

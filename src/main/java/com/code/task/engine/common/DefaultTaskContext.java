@@ -4,7 +4,9 @@ import com.code.task.engine.provider.ServiceProvider;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 任务上下文
@@ -12,7 +14,9 @@ import java.util.*;
  * @author Carson
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
-public class DefaultTaskContext implements ITaskContext<Long, Long> {
+public class DefaultTaskContext implements ITaskContext<Long, Long>, Serializable {
+
+    private static final long serialVersionUID = -5800519157849358734L;
 
     @Getter
     private final List<String> phases;
@@ -38,13 +42,22 @@ public class DefaultTaskContext implements ITaskContext<Long, Long> {
 
     private final ServiceProvider<Long, Long> serviceProvider;
 
-    private final Map<String, Object> contextPrams;
+    @Getter
+    private final Map<String, Object> contextParams;
 
     public DefaultTaskContext(ITask<Long> task, ServiceProvider<Long, Long> serviceProvider) {
         this.task = Objects.requireNonNull(task, "任务实体不能为空!");
         this.serviceProvider = Objects.requireNonNull(serviceProvider, "服务提供者不能为空!");
         this.phases = new LinkedList<>();
-        this.contextPrams = new LinkedHashMap<>(1);
+        this.contextParams = new LinkedHashMap<>(1);
+        this.ignorePhases = new ArrayList<>(0);
+    }
+
+    public DefaultTaskContext(ITask<Long> task, ServiceProvider<Long, Long> serviceProvider, Map<String, Object> contextParams) {
+        this.task = Objects.requireNonNull(task, "任务实体不能为空!");
+        this.serviceProvider = Objects.requireNonNull(serviceProvider, "服务提供者不能为空!");
+        this.phases = new LinkedList<>();
+        this.contextParams = contextParams;
         this.ignorePhases = new ArrayList<>(0);
     }
 
@@ -54,18 +67,20 @@ public class DefaultTaskContext implements ITaskContext<Long, Long> {
     }
 
     @Override
-    public void appendIgnores(String phase) {
-        ignorePhases.add(phase);
+    public void appendIgnores(String... phases) {
+        if (phases != null && phases.length > 0) {
+            ignorePhases.addAll(Arrays.stream(phases).collect(Collectors.toList()));
+        }
     }
 
     @Override
     public void put(String key, Object value) {
-        contextPrams.put(key, value);
+        contextParams.put(key, value);
     }
 
     @Override
     public Object get(String key) {
-        return contextPrams.get(key);
+        return contextParams.get(key);
     }
 
 }

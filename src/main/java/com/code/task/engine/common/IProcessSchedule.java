@@ -10,4 +10,6 @@ public interface IProcessSchedule<T> extends ISchedule<T> {
 
     String getProcess();
 
+    String getClassName();
+
 }

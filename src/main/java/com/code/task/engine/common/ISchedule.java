@@ -8,10 +8,12 @@ package com.code.task.engine.common;
  **/
 public interface ISchedule<T> {
 
+    T getScheduleId();
+
     T getTaskId();
 
     T getParentId();
 
-    Long getCronTime();
+    String getCron();
 
 }

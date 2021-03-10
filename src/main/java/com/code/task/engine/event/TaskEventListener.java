@@ -2,6 +2,7 @@ package com.code.task.engine.event;
 
 import com.code.task.engine.behavior.TaskBehavior;
 import com.code.task.engine.process.TaskProcess;
+import com.code.task.engine.provider.ServiceProvider;
 
 import java.util.Optional;
 
@@ -12,6 +13,8 @@ import java.util.Optional;
  * @github https://github.com/CarsonGithub/task-engine.git
  **/
 public interface TaskEventListener<T, U> {
+
+    ServiceProvider<T, U> serviceProvider();
 
     void listen(TaskEvent<T, U> event);
 
@@ -26,7 +29,14 @@ public interface TaskEventListener<T, U> {
     @SuppressWarnings({"unchecked", "rawtypes"})
     default void runSync(TaskEvent<T, U> event) {
         Class<?> clazz = event.getClazz();
-        Optional.of(event.getSource().serviceProvider().getBean(clazz)).ifPresent(executor -> {
+        ServiceProvider<T, U> tuServiceProvider;
+        try {
+            tuServiceProvider = event.getSource().serviceProvider();
+        } catch (Exception e) {
+            tuServiceProvider = serviceProvider();
+        }
+
+        Optional.of(tuServiceProvider.getBean(clazz)).ifPresent(executor -> {
             if (executor instanceof TaskBehavior) {
                 ((TaskBehavior<T, U>) executor).execute(event.getSource());
             } else if (executor instanceof TaskProcess) {

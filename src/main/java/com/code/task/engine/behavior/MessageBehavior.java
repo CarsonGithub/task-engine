@@ -26,10 +26,10 @@ public interface MessageBehavior<T, U> extends TaskBehavior<T, U> {
     default void doExecute(ITaskContext<T, U> taskContext) {
         switch (getPhase()) {
             case Send_Message:
-                taskContext.serviceProvider().<T, U>message().send(taskContext.getMessage());
+                taskContext.serviceProvider().message().send(taskContext.getMessage());
                 return;
             case Remove_Message:
-                taskContext.serviceProvider().<T, U>message().remove(taskContext.getMessage());
+                taskContext.serviceProvider().message().remove(taskContext.getMessage());
 
         }
     }

@@ -1,6 +1,5 @@
 package com.code.task.engine.behavior;
 
-import com.code.task.engine.common.IProcessSchedule;
 import com.code.task.engine.common.ITaskContext;
 
 import java.util.Objects;
@@ -31,16 +30,16 @@ public interface ScheduleBehavior<T, U> extends TaskBehavior<T, U> {
     default void doExecute(ITaskContext<T, U> taskContext) {
         switch (getPhase()) {
             case Init_Schedule:
-                taskContext.serviceProvider().<T>schedule().init((IProcessSchedule<T>) taskContext.getSchedule());
+                taskContext.serviceProvider().schedule().init(taskContext.getSchedule());
                 return;
             case Notify_Schedule:
-                taskContext.serviceProvider().<T>schedule().notify((IProcessSchedule<T>) taskContext.getSchedule());
+                taskContext.serviceProvider().schedule().notify(taskContext.getSchedule());
                 return;
             case Suspend_Schedule:
-                taskContext.serviceProvider().<T>schedule().suspend((IProcessSchedule<T>) taskContext.getSchedule());
+                taskContext.serviceProvider().schedule().suspend(taskContext.getSchedule());
                 return;
             case Remove_Schedule:
-                taskContext.serviceProvider().<T>schedule().remove((IProcessSchedule<T>) taskContext.getSchedule());
+                taskContext.serviceProvider().schedule().remove(taskContext.getSchedule());
         }
     }
 

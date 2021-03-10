@@ -34,7 +34,7 @@ public interface ITaskContext<T, U> {
 
     ServiceProvider<T, U> serviceProvider();
 
-    void appendIgnores(String phase);
+    void appendIgnores(String... phase);
 
     void put(String key, Object value);
 
